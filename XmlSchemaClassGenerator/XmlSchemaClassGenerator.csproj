@@ -14,7 +14,7 @@
     <AssemblyOriginatorKeyFile>XmlSchemaClassGenerator.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-    <PackageId>XmlSchemaClassGenerator-beta</PackageId>
+    <PackageId>Edlund.XmlSchemaClassGenerator</PackageId>
     <PackageTags>xsd</PackageTags>
     <PackageProjectUrl>https://github.com/mganss/XmlSchemaClassGenerator</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/mganss/XmlSchemaClassGenerator/blob/master/LICENSE</PackageLicenseUrl>
