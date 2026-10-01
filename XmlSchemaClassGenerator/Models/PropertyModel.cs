@@ -553,7 +553,7 @@ public class PropertyModel(GeneratorConfiguration configuration, string name, Ty
                 var arrayItemAttribute = AttributeDecl<XmlArrayItemAttribute>(
                     [.. propertyAttribute.Arguments.Cast<CodeAttributeArgument>().Where(x => !string.Equals(x.Name, nameof(Order), StringComparison.Ordinal))]);
                 var namespacePresent = arrayItemAttribute.Arguments.OfType<CodeAttributeArgument>().Any(a => a.Name == Namespace);
-                if (!namespacePresent && !arrayItemProperty.XmlSchemaName.IsEmpty && !string.IsNullOrEmpty(arrayItemProperty.XmlSchemaName.Namespace))
+                if (!namespacePresent && arrayItemProperty.ChoiceItems.Count == 0 && !arrayItemProperty.XmlSchemaName.IsEmpty && !string.IsNullOrEmpty(arrayItemProperty.XmlSchemaName.Namespace))
                     arrayItemAttribute.Arguments.Add(new(Namespace, new CodePrimitiveExpression(arrayItemProperty.XmlSchemaName.Namespace)));
                 member.CustomAttributes.Add(arrayItemAttribute);
             }
@@ -571,6 +571,24 @@ public class PropertyModel(GeneratorConfiguration configuration, string name, Ty
     private IEnumerable<CodeAttributeDeclaration> GetAttributes(bool isArray, TypeModel owningType = null)
     {
         var attributes = new List<CodeAttributeDeclaration>();
+
+        if (ChoiceItems.Count > 0)
+        {
+            owningType ??= OwningType;
+
+            foreach (var choiceItem in ChoiceItems)
+            {
+                var choiceAttribute = AttributeDecl<XmlElementAttribute>(new(new CodePrimitiveExpression(choiceItem.Name)),
+                    new(nameof(XmlElementAttribute.Type),new CodeTypeOfExpression(choiceItem.Type.GetReferenceFor(owningType.Namespace))));
+
+                if (Order != null)
+                    choiceAttribute.Arguments.Add(new(nameof(Order), new CodePrimitiveExpression(Order.Value)));
+
+                attributes.Add(choiceAttribute);
+            }
+
+            return attributes;
+        }
 
         if (IsKey && XmlSchemaName == null)
         {
@@ -601,23 +619,6 @@ public class PropertyModel(GeneratorConfiguration configuration, string name, Ty
             }
             else
             {
-                if (ChoiceItems.Count > 0)
-                {
-                    owningType ??= OwningType;
-
-                    foreach (var choiceItem in ChoiceItems)
-                    {
-                        var choiceAttribute = AttributeDecl<XmlElementAttribute>(new(new CodePrimitiveExpression(choiceItem.Name)),
-                            new(nameof(XmlElementAttribute.Type),new CodeTypeOfExpression(choiceItem.Type.GetReferenceFor(owningType.Namespace))));
-
-                        if (Order != null)
-                            choiceAttribute.Arguments.Add(new(nameof(Order), new CodePrimitiveExpression(Order.Value)));
-
-                        attributes.Add(choiceAttribute);
-                    }
-
-                    return attributes;
-                }
                 if (!Configuration.SeparateSubstitutes && Substitutes.Count > 0)
                 {
                     owningType ??= OwningType;
