@@ -388,6 +388,24 @@ public class Generator
     }
 
     /// <summary>
+    /// Generate xsd.exe-style Item and ItemElementName properties for choice elements.
+    /// </summary>
+    public bool GenerateChoiceItemProperty
+    {
+        get { return _configuration.GenerateChoiceItemProperty; }
+        set { _configuration.GenerateChoiceItemProperty = value; }
+    }
+
+    /// <summary>
+    /// Preserves the decimal CLR type for xs:decimal, even when fractionDigits is zero.
+    /// </summary>
+    public bool PreserveDecimalType
+    {
+        get { return _configuration.PreserveDecimalType; }
+        set { _configuration.PreserveDecimalType = value; }
+    }
+
+    /// <summary>
     /// Namespace where generated metadata helper attributes are emitted.
     /// </summary>
     public string MetadataNamespace

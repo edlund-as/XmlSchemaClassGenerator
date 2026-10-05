@@ -381,6 +381,16 @@ public class GeneratorConfiguration
     public bool EnumCollection { get; set; }
 
     /// <summary>
+    /// Generate xsd.exe-style Item and ItemElementName properties for choice elements.
+    /// </summary>
+    public bool GenerateChoiceItemProperty { get; set; }
+
+    /// <summary>
+    /// Preserves the decimal CLR type for xs:decimal, even when fractionDigits is zero.
+    /// </summary>
+    public bool PreserveDecimalType { get; set; }
+
+    /// <summary>
     /// Determines whether metadata helper types should be emitted.
     /// </summary>
     public bool EmitMetadataAttributes { get; set; }
