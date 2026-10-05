@@ -397,6 +397,15 @@ public class Generator
     }
 
     /// <summary>
+    /// Preserves the decimal CLR type for xs:decimal, even when fractionDigits is zero.
+    /// </summary>
+    public bool PreserveDecimalType
+    {
+        get { return _configuration.PreserveDecimalType; }
+        set { _configuration.PreserveDecimalType = value; }
+    }
+
+    /// <summary>
     /// Namespace where generated metadata helper attributes are emitted.
     /// </summary>
     public string MetadataNamespace
